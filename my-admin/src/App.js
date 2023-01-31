@@ -1,5 +1,52 @@
-import { HydraAdmin } from "@api-platform/admin";
+import {
+	HydraAdmin,
+	CreateGuesser,
+	InputGuesser,
+	ResourceGuesser,
+	ShowGuesser,
+	EditGuesser,
+	ListGuesser,
+	FieldGuesser,
+} from "@api-platform/admin";
+import { RichTextInput, DefaultEditorOptions } from "ra-input-rich-text";
+import { RichTextField, TextField, Resource } from "react-admin";
 
-// Replace with your own API entrypoint
-// For instance if https://example.com/api/books is the path to the collection of book resources, then the entrypoint is https://example.com/api
-export default () => <HydraAdmin entrypoint="http://127.0.0.1:8000/api/" />;
+const RecetteList = (props) => (
+	<ListGuesser {...props}>
+		<FieldGuesser source={"title"} />
+		<FieldGuesser source={"description"} hidden />
+	</ListGuesser>
+);
+
+const RecetteCreate = (props) => (
+	<CreateGuesser {...props}>
+		<InputGuesser source="title" />
+		<RichTextInput source="description" row={5} />
+	</CreateGuesser>
+);
+
+const RecetteEdit = (props) => (
+	<EditGuesser {...props}>
+		<InputGuesser source="title" />
+		<RichTextInput source="description" />
+	</EditGuesser>
+);
+
+const RecetteShow = (props) => (
+	<ShowGuesser {...props}>
+		<TextField source="title" />
+		<RichTextField source="description" />
+	</ShowGuesser>
+);
+
+export default () => (
+	<HydraAdmin entrypoint="http://127.0.0.1:8000/api/">
+		<ResourceGuesser
+			name={"recettes"}
+			list={RecetteList}
+			create={RecetteCreate}
+			edit={RecetteEdit}
+			show={RecetteShow}
+		/>
+	</HydraAdmin>
+);
